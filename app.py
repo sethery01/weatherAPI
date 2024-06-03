@@ -19,7 +19,10 @@ def consume_state_weather():
     state = request.args.get("state")
 
     # Invalid state or query
-    if state not in state_codes:
+    if not state:
+        message = "ERROR: No state code given"
+        return message, 400
+    elif state not in state_codes:
         message = "ERROR: Bad Request"
         return message, 400
 
