@@ -34,3 +34,6 @@ def consume_state_weather():
         return alerts, 200
     else:
         return "ERROR 404 NOT FOUND", 404
+    
+if __name__ == '__main__':
+   app.run(debug=True)
