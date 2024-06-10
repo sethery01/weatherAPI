@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 import os
 import requests
+import uvicorn
 
 state_codes = [
     'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 
@@ -12,14 +13,22 @@ state_codes = [
 
 app = FastAPI()
 
+# Display static html
 @app.get("/", response_class=HTMLResponse)
 async def read_index():
     # Read the contents of the index.html file
     with open(os.path.join("static", "index.html"), "r") as file:
         return HTMLResponse(content=file.read())
 
+# Return server health check
+@app.get("/health")
+async def return_health():
+    return "udlsethtst02.vuhl.root.mrc.local", 200
+
+
+# Return alerts with state param
 @app.get('/weather')
-#def consume_state_weather():
+# read_item from fastAPI - Gets the state query param
 async def read_item(state: str):
 
     # Invalid state or query
@@ -41,6 +50,9 @@ async def read_item(state: str):
     else:
         return "ERROR 404 NOT FOUND", 404
 
+def main():
+    uvicorn.run(app, host="0.0.0.0", port=443, ssl_keyfile='./key.key', ssl_certfile='./cert.crt')
+
+# Main calling function
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    main()
