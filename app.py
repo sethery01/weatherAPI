@@ -1,5 +1,5 @@
 from typing import Union
-from fastapi import FastAPI 
+from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 import os
 import requests
@@ -39,7 +39,7 @@ async def read_item(state: str):
         message = "ERROR: Bad Request"
         return message, 400
 
-    # Make request if above check(s) is passed
+    # Make request if above check(s) pass
     response = requests.get("https://api.weather.gov/alerts/active/area/" + state)
 
     if response.status_code == 200:
@@ -51,17 +51,33 @@ async def read_item(state: str):
         return "ERROR 404 NOT FOUND", 404
 
 
-# Return a link to weather forecast 
-# @app.get("/forecast")
-# # read_item from fastAPI - Gets the county query param
-# async def read_item(county: str):
+#Return a link to weather forecast 
+@app.get("/forecast")
+# read_item from fastAPI - Gets the county query param
+async def read_item(state: str, county: str):
     
-#     if not county:
-#         message = "ERROR: No county parameter given"
-#         return message, 400
+    if not state or not county:
+        message = "ERROR: No state or county parameter given"
+        return message, 400
+    elif state not in state_codes:
+        return "ERROR: Bad Request"
     
-#     return -1
-
+    # Make a get request for zones by county if above check(s) pass
+    response = requests.get("https://api.weather.gov/zones/county")
+    
+    if response.status_code == 200:
+        #zones = {}
+        for data in response.json()["features"]:
+            if state == data["properties"]["state"] and county == data["properties"]["name"]:
+                dict_link =  data["properties"]["forecastOffices"]
+                link = dict_link[0]
+                response2 = requests.get(str(link))
+                return response2.json()["sameAs"]
+            else:
+                continue
+    else:
+        return "ERROR 404 NOT FOUND", 404
+    
 def main():
     uvicorn.run(app, host="0.0.0.0", port=443, ssl_keyfile='./key.key', ssl_certfile='./cert.crt')
 
