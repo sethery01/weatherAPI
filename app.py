@@ -1,6 +1,6 @@
 from typing import Union
-from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import RedirectResponse, HTMLResponse
 import os
 import requests
 import uvicorn
@@ -66,18 +66,19 @@ async def read_item(state: str, county: str):
     response = requests.get("https://api.weather.gov/zones/county")
     
     if response.status_code == 200:
-        #zones = {}
         for data in response.json()["features"]:
             if state == data["properties"]["state"] and county == data["properties"]["name"]:
                 dict_link =  data["properties"]["forecastOffices"]
                 link = dict_link[0]
                 response2 = requests.get(str(link))
-                return response2.json()["sameAs"]
-            else:
-                continue
+                link = response2.json()["sameAs"]
+                # Redirect the client to the obtained link
+                return RedirectResponse(url=link)
+        # If the loop completes without finding a match
+        raise HTTPException(status_code=404, detail="ERROR 404 NOT FOUND")
     else:
-        return "ERROR 404 NOT FOUND", 404
-    
+        raise HTTPException(status_code=404, detail="ERROR 404 NOT FOUND")
+
 def main():
     uvicorn.run(app, host="0.0.0.0", port=443, ssl_keyfile='./key.key', ssl_certfile='./cert.crt')
 
