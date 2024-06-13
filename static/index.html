@@ -6,13 +6,25 @@
     <link rel="icon" href="https://cdn.pixabay.com/photo/2018/06/21/13/57/clouds-3488632_1280.jpg" type="image/x-icon">
     <title>Welcome to my Weather API</title>
     <style>
-        h1 {text-align: center;}
-        p {text-align: center;}  
-        a {align-items: center;}
+        h1, p, a {
+            text-align: center;
+            animation: rainbow 5s infinite;
+        }
+        
+        @keyframes rainbow {
+            0% { color: red; }
+            20% { color: orange; }
+            40% { color: yellow; }
+            60% { color: green; }
+            80% { color: blue; }
+            100% { color: violet; }
+        }
+        
         body {
             background-color: aqua;
+            font-family: "Comic Sans MS", cursive;
         }
-    </style>
+    </style>    
 </head>
 <body>
     <h1>Welcome to my Weather API</h1>
