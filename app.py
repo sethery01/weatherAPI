@@ -1,6 +1,7 @@
 from typing import Union
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import RedirectResponse, HTMLResponse
+from fastapi.middleware.cors import CORSMiddleware
 import os
 import requests
 import uvicorn
@@ -14,6 +15,16 @@ state_codes = [
 ]
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Display static html
 @app.get("/", response_class=HTMLResponse)

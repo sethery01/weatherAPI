@@ -12,11 +12,9 @@ function speak(myString) {
 }
 
 // Define the API URL
-let apiUrl = "https://udl01sethtst02.vuhl.root.mrc.local/alerts?state=";
-let form = document.getElementById('search-form')
-// console.log(form)
+var apiUrl = "https://udl01sethtst02.vuhl.root.mrc.local/alerts?state=";
 
-form.onsubmit = function () {
+function callBackend() {
     let queryState = document.getElementById('query-state')
     let requestUrl = apiUrl + queryState.value
     console.log(requestUrl);
