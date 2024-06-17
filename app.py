@@ -33,6 +33,13 @@ async def read_index():
     with open(os.path.join("static", "index.html"), "r") as file:
         return HTMLResponse(content=file.read())
 
+# Display static html for tts
+@app.get("/tts", response_class=HTMLResponse)
+async def read_index():
+    # Read the contents of the index.html file
+    with open(os.path.join("static", "tts.html"), "r") as file:
+        return HTMLResponse(content=file.read())
+
 # Return server health check
 @app.get("/health")
 async def return_health():
