@@ -55,6 +55,6 @@ function callBackend() {
         })
         .catch(error => {
             console.error('Error:', error);
-            speak('There was an error fetching the weather alerts. Please try again.');
+            speak('There was an error fetching the weather alerts. Please try again later.');
         });
 }

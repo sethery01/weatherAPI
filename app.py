@@ -84,7 +84,7 @@ async def read_item(state: str, county: str):
         message = "ERROR: No state or county parameter given"
         return message, 400
     elif state not in state_codes:
-        return "ERROR: Bad Request"
+        return "ERROR: Bad Request", 400
     
     # Make a get request for zones by county if above check(s) pass
     response = requests.get("https://api.weather.gov/zones/county")
