@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://cdn.pixabay.com/photo/2018/06/21/13/57/clouds-3488632_1280.jpg" type="image/x-icon">
+</head>
 <body>
   <main>
     <h1>Text To Speech</h1>
@@ -34,8 +39,9 @@
           if (!response.ok) {
             throw new Error('Network response was not ok');
           }
-          // console.log(response.json()) 
-          return response.json();
+          jsonBody = response.json()
+          console.log(jsonBody) 
+          return jsonBody;
         })
         .then(data => {
           console.log(data);
