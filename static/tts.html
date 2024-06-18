@@ -3,34 +3,74 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="https://cdn.pixabay.com/photo/2018/06/21/13/57/clouds-3488632_1280.jpg" type="image/x-icon">
+  <link rel="icon" href="https://cdn.pixabay.com/photo/2014/06/21/13/57/clouds-3488632_1280.jpg" type="image/x-icon">
+  <title>Text To Speech Alerts</title>
+  <style>
+    h1, h2, p, a, div {
+            text-align: center;
+            animation: rainbow 5s infinite;
+        }
+        
+        @keyframes rainbow {
+            0% { color: red; }
+            20% { color: orange; }
+            40% { color: yellow; }
+            60% { color: green; }
+            80% { color: blue; }
+            100% { color: purple; }
+        }
+        
+        body {
+            background-color: aqua;
+            font-family: "Comic Sans MS", cursive;
+        }
+  </style>
 </head>
 <body>
   <main>
-    <h1>Text To Speech</h1>
-    <div><input type="text" name="state" id="query-state" /> <input type="submit" value="Input State"
-        onclick="callBackend();" /></div>
+    <h1>Text To Speech Weather Alerts!!!</h1>
+    <div>
+      <input type="text" name="state" id="query-state" placeholder="Enter state" />
+      <input type="submit" value="Input State" onclick="callBackend();" />
+    </div>
+    <h2>************************************************************************************************</h2>
+    <div id="spoken-text"></div>
   </main>
   <script>
     function speak(myString) {
+      // Display the text being spoken
+      document.getElementById('spoken-text').textContent = myString;
+
       // Create a SpeechSynthesisUtterance
       const utterance = new SpeechSynthesisUtterance(myString);
 
-      // Select a voice
-      const voices = speechSynthesis.getVoices();
-      console.log(voices)
-      utterance.voice = voices[18]; // Choose a specific voice
+      // Load voices and select a specific one
+      speechSynthesis.onvoiceschanged = function () {
+        const voices = speechSynthesis.getVoices();
+        console.log(voices);
+        if (voices.length > 14) {
+          utterance.voice = voices[14]; // Choose a specific voice, ensure index 14 exists
+        }
+        speechSynthesis.speak(utterance);
+      };
 
-      // Speak the text
-      speechSynthesis.speak(utterance);
+      // Speak the text (if voices are already loaded)
+      if (speechSynthesis.getVoices().length > 0) {
+        const voices = speechSynthesis.getVoices();
+        console.log(voices);
+        if (voices.length > 14) {
+          utterance.voice = voices[14]; // Choose a specific voice, ensure index 14 exists
+        }
+        speechSynthesis.speak(utterance);
+      }
     }
 
     // Define the API URL
-    var apiUrl = "https://udl01sethtst02.vuhl.root.mrc.local/alerts?state="
+    var apiUrl = "https://udl01sethtst02.vuhl.root.mrc.local/alerts?state=";
 
     function callBackend() {
-      let queryState = document.getElementById('query-state')
-      let requestUrl = apiUrl + queryState.value
+      let queryState = document.getElementById('query-state');
+      let requestUrl = apiUrl + queryState.value;
       console.log(requestUrl);
 
       // Make a GET request
@@ -39,17 +79,16 @@
           if (!response.ok) {
             throw new Error('Network response was not ok');
           }
-          jsonBody = response.json()
-          console.log(jsonBody) 
-          return jsonBody;
+          return response.json();
         })
-        .then(data => {
-          console.log(data);
+        .then(jsonBody => {
+          console.log(jsonBody);
+          speak(JSON.stringify(jsonBody));
         })
         .catch(error => {
           console.error('Error:', error);
         });
-    };
+    }
   </script>
 </body>
 </html>
