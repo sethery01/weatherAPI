@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="https://cdn.pixabay.com/photo/2014/06/21/13/57/clouds-3488632_1280.jpg" type="image/x-icon">
+  <link rel="icon" href="https://cdn.pixabay.com/photo/2014/06/21/13/57/clouds-3488632_1280.jpg" type="image/x-icon"> 
   <title>Text To Speech Alerts</title>
-  <style>
+  <link href="/static/styles.css" rel="stylesheet"/>
+  <!-- <style>
     h1, h2, p, a, div {
             text-align: center;
             animation: rainbow 5s infinite;
@@ -24,7 +25,7 @@
             background-color: aqua;
             font-family: "Comic Sans MS", cursive;
         }
-  </style>
+  </style> -->
 </head>
 <body>
   <main>
@@ -36,59 +37,6 @@
     <h2>************************************************************************************************</h2>
     <div id="spoken-text"></div>
   </main>
-  <script>
-    function speak(myString) {
-      // Display the text being spoken
-      document.getElementById('spoken-text').textContent = myString;
-
-      // Create a SpeechSynthesisUtterance
-      const utterance = new SpeechSynthesisUtterance(myString);
-
-      // Load voices and select a specific one
-      speechSynthesis.onvoiceschanged = function () {
-        const voices = speechSynthesis.getVoices();
-        console.log(voices);
-        if (voices.length > 14) {
-          utterance.voice = voices[14]; // Choose a specific voice, ensure index 14 exists
-        }
-        speechSynthesis.speak(utterance);
-      };
-
-      // Speak the text (if voices are already loaded)
-      if (speechSynthesis.getVoices().length > 0) {
-        const voices = speechSynthesis.getVoices();
-        console.log(voices);
-        if (voices.length > 14) {
-          utterance.voice = voices[14]; // Choose a specific voice, ensure index 14 exists
-        }
-        speechSynthesis.speak(utterance);
-      }
-    }
-
-    // Define the API URL
-    var apiUrl = "https://udl01sethtst02.vuhl.root.mrc.local/alerts?state=";
-
-    function callBackend() {
-      let queryState = document.getElementById('query-state');
-      let requestUrl = apiUrl + queryState.value;
-      console.log(requestUrl);
-
-      // Make a GET request
-      fetch(requestUrl)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(jsonBody => {
-          console.log(jsonBody);
-          speak(JSON.stringify(jsonBody));
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    }
-  </script>
+  <script src="/static/script.js"></script>
 </body>
 </html>

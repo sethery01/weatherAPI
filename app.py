@@ -1,6 +1,7 @@
 from typing import Union
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import RedirectResponse, HTMLResponse
+from fastapi.responses import RedirectResponse, HTMLResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import requests
@@ -14,7 +15,11 @@ state_codes = [
     'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
 ]
 
+# init the app
 app = FastAPI()
+
+# Mount the static directory
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 origins = ["*"]
 
@@ -33,7 +38,6 @@ async def read_index():
     with open(os.path.join("static", "index.html"), "r") as file:
         return HTMLResponse(content=file.read())
 
-# Display static html for tts
 @app.get("/tts", response_class=HTMLResponse)
 async def read_index():
     # Read the contents of the index.html file
