@@ -27,7 +27,8 @@ function speak(myString) {
 }
 
 // Define the API URL
-var apiUrl = "https://udl01sethtst02.vuhl.root.mrc.local/alerts?state=";
+// var apiUrl = "https://udl01sethtst02.vuhl.root.mrc.local/alerts?state=";
+var apiUrl = "https://0.0.0.0/alerts?state=" // DEV LINK
 
 function callBackend() {
     let queryState = document.getElementById('query-state');

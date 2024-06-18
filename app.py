@@ -58,10 +58,10 @@ async def read_item(state: str):
     # Invalid state or query
     if not state:
         message = "ERROR: No state code given"
-        return message, 400
+        raise HTTPException(status_code=400, detail=message)
     elif state not in state_codes:
         message = "ERROR: Bad Request"
-        return message, 400
+        raise HTTPException(status_code=404, detail=message)
 
     # Make request if above check(s) pass
     response = requests.get("https://api.weather.gov/alerts/active/area/" + state)
@@ -72,7 +72,8 @@ async def read_item(state: str):
             alerts_dict[data["properties"]["headline"]] = data["properties"]["instruction"]
         return alerts_dict, 200
     else:
-        return "ERROR 404 NOT FOUND", 404
+        message = "NWS API not hit properly"
+        raise HTTPException(status_code=404, detail=message)
 
 
 #Return a link to weather forecast 
@@ -82,9 +83,10 @@ async def read_item(state: str, county: str):
     
     if not state or not county:
         message = "ERROR: No state or county parameter given"
-        return message, 400
+        raise HTTPException(status_code=404, detail=message)
     elif state not in state_codes:
-        return "ERROR: Bad Request", 400
+        message = "ERROR: Bad Request"
+        raise HTTPException(status_code=404, detail=message)
     
     # Make a get request for zones by county if above check(s) pass
     response = requests.get("https://api.weather.gov/zones/county")
