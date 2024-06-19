@@ -1,4 +1,4 @@
-h1, h2, p, a, div {
+h1, h2, p, a, div, ul, li {
     text-align: center;
     animation: rainbow 5s infinite;
 }
