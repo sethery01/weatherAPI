@@ -2,4 +2,5 @@ __pycache__
 .venv
 key.key
 zones.json
+forecast.json
 .DS_Store

@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 import requests
 import uvicorn
+import pandas as pd
 
 # server URL: "udl01sethtst02.vuhl.root.mrc.local"
 
@@ -14,6 +15,11 @@ state_codes = [
     'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 
     'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
 ]
+
+# Use a CSV file containing all US counties (sourced from a reliable dataset)
+df = pd.read_csv("./counties.csv")
+counties = df['CTYNAME'].unique()
+counties_list = counties.tolist()
 
 # init the app
 app = FastAPI()
@@ -31,24 +37,31 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Display static html
+# Display static html homepage
 @app.get("/", response_class=HTMLResponse)
 async def read_index():
     # Read the contents of the index.html file
     with open(os.path.join("static", "index.html"), "r") as file:
         return HTMLResponse(content=file.read())
 
-@app.get("/tts", response_class=HTMLResponse)
+# Display static html alerts
+@app.get("/alerts/tts", response_class=HTMLResponse)
 async def read_index():
     # Read the contents of the index.html file
-    with open(os.path.join("static", "tts.html"), "r") as file:
+    with open(os.path.join("static", "alerts.html"), "r") as file:
+        return HTMLResponse(content=file.read())
+
+# Display static html alerts
+@app.get("/forecast/tts", response_class=HTMLResponse)
+async def read_index():
+    # Read the contents of the index.html file
+    with open(os.path.join("static", "forecast.html"), "r") as file:
         return HTMLResponse(content=file.read())
 
 # Return server health check
 @app.get("/health")
 async def return_health():
     return "udlsethtst02.vuhl.root.mrc.local", 200
-
 
 # Return alerts with state param
 @app.get('/alerts')
@@ -61,7 +74,7 @@ async def read_item(state: str):
         raise HTTPException(status_code=400, detail=message)
     elif state not in state_codes:
         message = "ERROR: Bad Request"
-        raise HTTPException(status_code=404, detail=message)
+        raise HTTPException(status_code=400, detail=message)
 
     # Make request if above check(s) pass
     response = requests.get("https://api.weather.gov/alerts/active/area/" + state)
@@ -84,10 +97,13 @@ async def read_item(state: str):
 async def read_item(state: str, county: str):
     if not state or not county:
         message = "ERROR: No state or county parameter given"
-        raise HTTPException(status_code=404, detail=message)
+        raise HTTPException(status_code=400, detail=message)
     elif state not in state_codes:
         message = "ERROR: Bad Request"
-        raise HTTPException(status_code=404, detail=message)
+        raise HTTPException(status_code=400, detail=message)
+    elif county + " County" not in counties_list:
+        message = "ERROR: Bad Request"
+        raise HTTPException(status_code=400, detail=message)
 
     # Make a get request for zones by state/county if above check(s) pass
     response = requests.get("https://api.weather.gov/zones/public")
@@ -105,8 +121,14 @@ async def read_item(state: str, county: str):
     response = requests.get("https://api.weather.gov/zones/public/" + id + "/forecast")
 
     if response.status_code == 200:
-        # temp return... parse to return a dict of name:detailed forecast i.e. today:sunny. a slight chance of...
-        return response.json()["properties"], 200
+        forecast_dict = {}
+        for data in response.json()["properties"]["periods"]:
+            forecast_dict[data["name"]] = data["detailedForecast"]
+        if not forecast_dict:
+            message = "No forecast found for " + state + "and " + county
+            print(message)
+            raise HTTPException(status_code=404, detail=message)
+        return forecast_dict, 200
     else:  
         message = "NWS API not hit properly"
         raise HTTPException(status_code=404, detail=message)
