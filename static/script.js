@@ -11,9 +11,8 @@ function speak(myString) {
     speechSynthesis.speak(utterance);
 }
 
-// var apiUrl = "https://udl01sethtst02.vuhl.root.mrc.local/alerts?state=" // SERVER LINK
-
 function callBackendAlerts() {
+    // var apiUrl = "https://udl01sethtst02.vuhl.root.mrc.local/alerts?state=" // SERVER LINK
     var apiUrl = "https://0.0.0.0/alerts?state=" // DEV LINK
     let queryState = document.getElementById('query-state');
     let requestUrl = apiUrl + queryState.value;
@@ -45,6 +44,7 @@ function callBackendAlerts() {
 }
 
 function callBackendForecast() {
+    // var apiUrl = "https://udl01sethtst02.vuhl.root.mrc.local/forecast?state=" // SERVER LINK
     var apiUrl = "https://0.0.0.0/forecast?state=" // DEV LINK
     let queryState = document.getElementById('query-state');
     let queryCounty = document.getElementById('query-county').value;
