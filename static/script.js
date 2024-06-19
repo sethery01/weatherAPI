@@ -12,9 +12,10 @@ function speak(myString) {
 
 // Define the API URL
 // var apiUrl = "https://udl01sethtst02.vuhl.root.mrc.local/alerts?state=";
-var apiUrl = "https://0.0.0.0/alerts?state=" // DEV LINK
+// var apiUrl = "https://0.0.0.0/alerts?state=" // DEV LINK
 
 function callBackend() {
+    var apiUrl = "https://0.0.0.0/alerts?state=" // DEV LINK
     let queryState = document.getElementById('query-state');
     let requestUrl = apiUrl + queryState.value;
     document.getElementById('spoken-text').textContent = "Fetching weather alerts...";
@@ -40,6 +41,6 @@ function callBackend() {
         })
         .catch(error => {
             console.error('Error:', error);
-            speak('There was an error fetching the weather alerts. Please try again later.');
+            speak('There was an error fetching the weather alerts. Please try again later. There may be no alerts.');
         });
 }

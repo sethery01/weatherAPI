@@ -79,9 +79,40 @@ async def read_item(state: str):
         message = "NWS API not hit properly"
         raise HTTPException(status_code=404, detail=message)
 
+@app.get("/forecast")
+# read_item from fastAPI - Gets the state and county parameter
+async def read_item(state: str, county: str):
+    if not state or not county:
+        message = "ERROR: No state or county parameter given"
+        raise HTTPException(status_code=404, detail=message)
+    elif state not in state_codes:
+        message = "ERROR: Bad Request"
+        raise HTTPException(status_code=404, detail=message)
+
+    # Make a get request for zones by state/county if above check(s) pass
+    response = requests.get("https://api.weather.gov/zones/public")
+
+    if response.status_code == 200:
+        for data in response.json()["features"]:
+            if state == data["properties"]["state"] and county == data["properties"]["name"]:
+                id = data["properties"]["id"]
+                break
+    else:
+        message = "NWS API not hit properly"
+        raise HTTPException(status_code=404, detail=message)
+    
+    # Make a second request for zones with state county and id
+    response = requests.get("https://api.weather.gov/zones/public/" + id + "/forecast")
+
+    if response.status_code == 200:
+        # temp return... parse to return a dict of name:detailed forecast i.e. today:sunny. a slight chance of...
+        return response.json()["properties"], 200
+    else:  
+        message = "NWS API not hit properly"
+        raise HTTPException(status_code=404, detail=message)
 
 #Return a link to weather forecast 
-@app.get("/forecast/page")
+@app.get("/forecast/redirect")
 # read_item from fastAPI - Gets the county query param
 async def read_item(state: str, county: str):
     
