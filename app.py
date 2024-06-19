@@ -108,6 +108,7 @@ async def read_item(state: str, county: str):
     # Make a get request for zones by state/county if above check(s) pass
     response = requests.get("https://api.weather.gov/zones/public")
 
+    id = "bleh"
     if response.status_code == 200:
         for data in response.json()["features"]:
             if state == data["properties"]["state"] and county == data["properties"]["name"]:

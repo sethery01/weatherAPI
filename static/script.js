@@ -7,7 +7,7 @@ function speak(myString) {
     const voices = speechSynthesis.getVoices();
     console.log(voices);
     utterance.voice = voices[14];
-    utterance.rate = 0.2;
+    utterance.rate = .2;
     speechSynthesis.speak(utterance);
 }
 
@@ -74,6 +74,6 @@ function callBackendForecast() {
         })
         .catch(error => {
             console.error('Error:', error);
-            speak('There was an error fetching the weather alerts. Please try again later. There may be no alerts.');
+            speak('There was an error fetching the forecast. Please try again later.\nYour county may not be public - thanks National Weather Service :(');
         });
 }
