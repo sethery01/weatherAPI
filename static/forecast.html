@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/static/clouds.jpg" type="image/x-icon"> 
+  <title>Text To Speech Alerts</title>
+  <link href="/static/styles.css" rel="stylesheet"/>
+</head>
+<body>
+  <main>
+    <h1>Text To Speech Weather Forecast!!!</h1>
+    <div>
+      <input type="text" name="state" id="query-state" placeholder="Enter state" />
+      <input type="text" name="county" id="query-county" placeholder="Enter county" />
+      <input type="submit" value="Submit" onclick="callBackendForecast();"/>
+    </div>
+    <h2>************************************************************************************************</h2>
+    <div id="spoken-text"></div>
+  </main>
+  <script src="/static/script.js"></script>
+</body>
+</html>
