@@ -70,6 +70,10 @@ async def read_item(state: str):
         alerts_dict = {}
         for data in response.json()["features"]:
             alerts_dict[data["properties"]["headline"]] = data["properties"]["instruction"]
+        if not alerts_dict:
+            message = "No weather alerts for state: " + state
+            print(message)
+            raise HTTPException(status_code=404, detail=message)
         return alerts_dict, 200
     else:
         message = "NWS API not hit properly"
@@ -77,7 +81,7 @@ async def read_item(state: str):
 
 
 #Return a link to weather forecast 
-@app.get("/forecast")
+@app.get("/forecast/page")
 # read_item from fastAPI - Gets the county query param
 async def read_item(state: str, county: str):
     

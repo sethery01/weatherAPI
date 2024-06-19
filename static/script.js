@@ -4,26 +4,10 @@ function speak(myString) {
 
     // Create a SpeechSynthesisUtterance
     const utterance = new SpeechSynthesisUtterance(myString);
-
-    // Load voices and select a specific one
-    speechSynthesis.onvoiceschanged = function () {
-        const voices = speechSynthesis.getVoices();
-        console.log(voices);
-        if (voices.length > 14) {
-            utterance.voice = voices[14]; // Choose a specific voice, ensure index 14 exists
-        }
-        speechSynthesis.speak(utterance);
-    };
-
-    // Speak the text (if voices are already loaded)
-    if (speechSynthesis.getVoices().length > 0) {
-        const voices = speechSynthesis.getVoices();
-        console.log(voices);
-        if (voices.length > 14) {
-            utterance.voice = voices[14]; // Choose a specific voice, ensure index 14 exists
-        }
-        speechSynthesis.speak(utterance);
-    }
+    const voices = speechSynthesis.getVoices();
+    console.log(voices);
+    utterance.voice = voices[14];
+    speechSynthesis.speak(utterance);
 }
 
 // Define the API URL
