@@ -7,7 +7,7 @@ function speak(myString) {
     const voices = speechSynthesis.getVoices();
     console.log(voices);
     utterance.voice = voices[14];
-    utterance.rate = 0.8;
+    utterance.rate = 0.2;
     speechSynthesis.speak(utterance);
 }
 
