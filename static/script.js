@@ -14,6 +14,7 @@ function speak(myString) {
 function callBackendAlerts() {
     // var apiUrl = "https://udl01sethtst02.vuhl.root.mrc.local/alerts?state=" // SERVER LINK
     var apiUrl = "https://0.0.0.0/alerts?state=" // DEV LINK
+    // var apiUrl = "http://localhost:8080/alerts?state=" // goApi Dev link
     let queryState = document.getElementById('query-state');
     let requestUrl = apiUrl + queryState.value;
     document.getElementById('spoken-text').textContent = "Fetching weather alerts...";
@@ -46,6 +47,7 @@ function callBackendAlerts() {
 function callBackendForecast() {
     // var apiUrl = "https://udl01sethtst02.vuhl.root.mrc.local/forecast?state=" // SERVER LINK
     var apiUrl = "https://0.0.0.0/forecast?state=" // DEV LINK
+    // var apiUrl = "http://localhost:8080/alerts?state=" // goApi Dev link
     let queryState = document.getElementById('query-state');
     let queryCounty = document.getElementById('query-county').value;
     let requestUrl = apiUrl + queryState.value;
