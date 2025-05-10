@@ -7,14 +7,14 @@ function speak(myString) {
     const voices = speechSynthesis.getVoices();
     console.log(voices);
     utterance.voice = voices[14];
-    utterance.rate = .2;
+    utterance.rate = 1;
     speechSynthesis.speak(utterance);
 }
 
 // var apiUrl = "https://udl01sethtst02.vuhl.root.mrc.local/alerts?state=" // SERVER LINK
 
 function callBackendAlerts() {
-    var apiUrl = "https://0.0.0.0/alerts?state=" // DEV LINK
+    var apiUrl = "http://localhost:8000/alerts?state=";  // Match FastAPI port
     let queryState = document.getElementById('query-state');
     let requestUrl = apiUrl + queryState.value;
     document.getElementById('spoken-text').textContent = "Fetching weather alerts...";
@@ -45,7 +45,7 @@ function callBackendAlerts() {
 }
 
 function callBackendForecast() {
-    var apiUrl = "https://0.0.0.0/forecast?state=" // DEV LINK
+    var apiUrl = "http://localhost:8000/forecast?state=" // DEV LINK
     let queryState = document.getElementById('query-state');
     let queryCounty = document.getElementById('query-county').value;
     let requestUrl = apiUrl + queryState.value;

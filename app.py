@@ -164,7 +164,7 @@ async def read_item(state: str, county: str):
         raise HTTPException(status_code=404, detail="ERROR 404 NOT FOUND")
 
 def main():
-    uvicorn.run(app, host="0.0.0.0", port=443, ssl_keyfile='./key.key', ssl_certfile='./cert.crt')
+    uvicorn.run(app, host="0.0.0.0", port=8000) #, ssl_keyfile='./key.key', ssl_certfile='./cert.crt')
 
 # Main calling function
 if __name__ == "__main__":
